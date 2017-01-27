@@ -23,6 +23,9 @@ public interface Interface {
     @WebMethod(operationName="getAuth_info")
     public String[] get_auth(@WebParam(name="personId") int id);
     
+    @WebMethod(operationName="getExercises")
+    public List<Exercise> getExercises();
+    
     @WebMethod(operationName="getFood")
     public Food getFood(@WebParam(name="foodId") int id);
     

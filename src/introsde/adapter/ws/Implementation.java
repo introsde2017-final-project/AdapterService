@@ -37,6 +37,12 @@ public class Implementation implements Interface{
 	final static private String APP_URL="http://platform.fatsecret.com/rest/server.api";
 	final static private String APP_SECRET = "dd6626f98f2b49c099a0782284f74e17";
 	final static private String HMAC_SHA1_ALGORITHM = "HmacSHA1";
+	WebTarget service;
+	ObjectMapper mapper = new ObjectMapper();
+	ClientConfig clientConfig = new ClientConfig();
+	Client client = ClientBuilder.newClient(clientConfig);
+	String[] template = new String[1];
+	JsonNode node;
 	
 	@Override
 	public String[] createPerson(int id) {
@@ -55,19 +61,15 @@ public class Implementation implements Interface{
 	
 	public String[] sendPersonRequest(String method, int id){
 		List<String> params = new ArrayList<>(Arrays.asList(generateOauthParams()));
-        String[] template = new String[1];
-        params.add("method="+method);
+   
+        params.add("method="+ method);
         params.add("user_id="+id);
         params.add("oauth_signature=" + sign("GET", params.toArray(template)));
-        
-		WebTarget service;
-		ObjectMapper mapper = new ObjectMapper();
-		ClientConfig clientConfig = new ClientConfig();
-		Client client = ClientBuilder.newClient(clientConfig);
+		
 		service = client.target(APP_URL +"?" + paramify(params.toArray(template)));
 		Response resp = service.request().get();
 	    String json = resp.readEntity(String.class);
-	    JsonNode node;
+	    
 	    String[] result= new String[2];
 		try {
 			node = mapper.readTree(json);
@@ -83,25 +85,52 @@ public class Implementation implements Interface{
 		}	    
 		return result;
 	}
+	
+	@Override
+	public List<Exercise> getExercises() {
+		List<String> params = new ArrayList<>(Arrays.asList(generateOauthParams()));
+
+        params.add("method=exercises.get");
+        params.add("oauth_signature=" + sign("GET", params.toArray(template)));
+        
+	
+		service = client.target(APP_URL +"?" + paramify(params.toArray(template)));
+		Response resp = service.request().get();
+	    String json = resp.readEntity(String.class);
+	    
+	    List<Exercise> exercises = new ArrayList<>();
+	    try {
+			node = mapper.readTree(json);
+			JsonNode exercisesNode = node.path("exercises").path("exercise");
+			for (JsonNode n : exercisesNode) {
+				Exercise e = new Exercise();
+				e.setId(n.path("exercise_id").asInt());
+				e.setName(n.path("exercise_name").asText());
+				exercises.add(e);
+			}
+			
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return exercises;
+	}
 
 	
 	@Override
 	public Food getFood(int food_id) {
 		List<String> params = new ArrayList<>(Arrays.asList(generateOauthParams()));
-        String[] template = new String[1];
+		
         params.add("method=food.get");
         params.add("food_id="+food_id);
         params.add("oauth_signature=" + sign("GET", params.toArray(template)));
         
-		WebTarget service;
-		ObjectMapper mapper = new ObjectMapper();
-		ClientConfig clientConfig = new ClientConfig();
-		Client client = ClientBuilder.newClient(clientConfig);
+		
 		service = client.target(APP_URL +"?" + paramify(params.toArray(template)));
 		Response resp = service.request().get();
 	    String json = resp.readEntity(String.class);
-	    System.out.println(json);
-	    JsonNode node;
+	    
 	    Food f = new Food();
 	    try {
 			node = mapper.readTree(json);
@@ -122,20 +151,16 @@ public class Implementation implements Interface{
 	@Override
 	public List<Food> searchFood(String s) {
 		List<String> params = new ArrayList<>(Arrays.asList(generateOauthParams()));
-        String[] template = new String[1];
+
         params.add("method=foods.search");
         params.add("search_expression="+s);
         params.add("oauth_signature=" + sign("GET", params.toArray(template)));
         
-		WebTarget service;
-		ObjectMapper mapper = new ObjectMapper();
-		ClientConfig clientConfig = new ClientConfig();
-		Client client = ClientBuilder.newClient(clientConfig);
+	
 		service = client.target(APP_URL +"?" + paramify(params.toArray(template)));
 		Response resp = service.request().get();
 	    String json = resp.readEntity(String.class);
-	    System.out.println(json);
-	    JsonNode node;
+
 	    List<Food> foods = new ArrayList<>();
 	    try {
 			node = mapper.readTree(json);
