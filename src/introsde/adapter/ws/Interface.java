@@ -21,7 +21,13 @@ public interface Interface {
     public Person createPerson(@WebParam(name="personId") int id);
     
     @WebMethod(operationName="getAuth_info")
-    public Person get_auth(@WebParam(name="personId") int id);
+    public Person get_auth(@WebParam(name="personId") int id);	
+    
+    @WebMethod(operationName="setInfo")
+    public boolean setInfo(@WebParam(name="user") Person user, @WebParam(name="weight") double weight, @WebParam(name="height") double height, @WebParam(name="weight_goal") double weight_goal);
+    
+    @WebMethod(operationName="weightUpdate")
+    public boolean weightUpdate(@WebParam(name="user") Person user, @WebParam(name="weight") int weight);
     
     @WebMethod(operationName="getExercises")
     public List<Exercise> getExercises();
@@ -34,7 +40,7 @@ public interface Interface {
     
     //Exercise Diary
     @WebMethod(operationName="getExerciseEntry")
-    public List<Exercise> getExerciseEntry(@WebParam(name="oauth_token") Person user, @WebParam(name="date") int date);
+    public List<Exercise> getExerciseEntry(@WebParam(name="user") Person user, @WebParam(name="date") int date);
     
 //    @WebMethod(operationName="editExerciseEntry")
 //    public void editExerciseEntry(@WebParam(name="oauth_token") Person user, @WebParam(name="date") int date);

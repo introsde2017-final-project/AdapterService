@@ -44,16 +44,16 @@ public class Implementation implements Interface{
 	String[] template = new String[1];
 	JsonNode node;
 	
+	// <---------  PERSON 
+	
 	@Override
 	public Person createPerson(int id) {
-		System.out.println("Create Person");
 		return sendPersonRequest("profile.create", id);
 	}
 	
 	
 	@Override
 	public Person get_auth(int id) {
-		System.out.println("Get auth");
 		return sendPersonRequest("profile.get_auth", id);
 	}
 	
@@ -87,35 +87,62 @@ public class Implementation implements Interface{
 	}
 	
 	@Override
-	public List<Exercise> getExercises() {
+	public boolean setInfo(Person user, double weight, double height, double weight_goal) {
 		List<String> params = new ArrayList<>(Arrays.asList(generateOauthParams()));
 
-        params.add("method=exercises.get");
-        params.add("oauth_signature=" + sign("GET", params.toArray(template)));
+        params.add("method=weight.update");
+        params.add("current_weight_kg="+weight);
+        params.add("current_height_cm="+height);
+        params.add("goal_weight_kg="+weight_goal);
+        params.add("oauth_token="+user.getAuth_token());
         
+        params.add("oauth_signature=" + sign("GET", params.toArray(template), user.getAuth_secret()));
 	
 		service = client.target(APP_URL +"?" + paramify(params.toArray(template)));
 		Response resp = service.request().get();
 	    String json = resp.readEntity(String.class);
+	    //System.out.println(json);
 	    
-	    List<Exercise> exercises = new ArrayList<>();
 	    try {
 			node = mapper.readTree(json);
-			JsonNode exercisesNode = node.path("exercises").path("exercise");
-			for (JsonNode n : exercisesNode) {
-				Exercise e = new Exercise();
-				e.setId(n.path("exercise_id").asInt());
-				e.setName(n.path("exercise_name").asText());
-				exercises.add(e);
-			}
-			
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
+			if(node.path("success").path("value").asInt()==1)
+				return true;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return exercises;
+	    return false;
+		
 	}
+
+
+	@Override
+	public boolean weightUpdate(Person user, int weight) {
+		List<String> params = new ArrayList<>(Arrays.asList(generateOauthParams()));
+
+        params.add("method=weight.update");
+        params.add("current_weight_kg="+weight);
+        params.add("oauth_token="+user.getAuth_token());
+        
+        params.add("oauth_signature=" + sign("GET", params.toArray(template), user.getAuth_secret()));
+	
+		service = client.target(APP_URL +"?" + paramify(params.toArray(template)));
+		Response resp = service.request().get();
+	    String json = resp.readEntity(String.class);
+//	    System.out.println(json);
+	    
+	    try {
+			node = mapper.readTree(json);
+			if(node.path("success").path("value").asInt()==1)
+				return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	    return false;
+		
+	}
+	
+	
+	// <------ FOOD
 
 	
 	@Override
@@ -183,6 +210,39 @@ public class Implementation implements Interface{
 		return foods;
 	}
 	
+	// <--------- EXERCISE
+	
+	@Override
+	public List<Exercise> getExercises() {
+		List<String> params = new ArrayList<>(Arrays.asList(generateOauthParams()));
+
+        params.add("method=exercises.get");
+        params.add("oauth_signature=" + sign("GET", params.toArray(template)));
+        
+	
+		service = client.target(APP_URL +"?" + paramify(params.toArray(template)));
+		Response resp = service.request().get();
+	    String json = resp.readEntity(String.class);
+	    
+	    List<Exercise> exercises = new ArrayList<>();
+	    try {
+			node = mapper.readTree(json);
+			JsonNode exercisesNode = node.path("exercises").path("exercise");
+			for (JsonNode n : exercisesNode) {
+				Exercise e = new Exercise();
+				e.setId(n.path("exercise_id").asInt());
+				e.setName(n.path("exercise_name").asText());
+				exercises.add(e);
+			}
+			
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return exercises;
+	}
+	
 	
 	@Override
 	public List<Exercise> getExerciseEntry(Person user, int date) {
@@ -194,12 +254,11 @@ public class Implementation implements Interface{
         
         params.add("oauth_signature=" + sign("GET", params.toArray(template), user.getAuth_secret()));
 
-        System.out.println(APP_URL +"?" + paramify(params.toArray(template)));
 	
 		service = client.target(APP_URL +"?" + paramify(params.toArray(template)));
 		Response resp = service.request().get();
 	    String json = resp.readEntity(String.class);
-	    System.out.println(json);
+//	    System.out.println(json);
 	    
 	    List<Exercise> exercises = new ArrayList<>();
 	    try {
@@ -222,6 +281,7 @@ public class Implementation implements Interface{
 	    
 		return exercises;
 	}
+
 
 
 
@@ -287,7 +347,6 @@ public class Implementation implements Interface{
         }
         return result;
     }
-
 
 
 
