@@ -6,7 +6,8 @@ Documentation about the Adapter Service: SOAP Web Service
 
 ## API
 #### Creates a new profile and returns the oauth_token and oauth_secret for the new profile
-```<soap:Envelope
+```
+<soap:Envelope
 xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
 soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
     <soap:Body xmlns:m="http://ws.adapter.introsde/">
@@ -14,10 +15,12 @@ soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
         	<personId>143</personId>
         </m:createPerson>
     </soap:Body>
-</soap:Envelope>```
+</soap:Envelope>
+```
 
 #### Returns the authentication information for an user
-```<soap:Envelope
+```
+<soap:Envelope
 xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
 soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
     <soap:Body xmlns:m="http://ws.adapter.introsde/">
@@ -25,10 +28,12 @@ soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
         	<personId>143</personId>
         </m:getAuth_info>
     </soap:Body>
-</soap:Envelope>```
+</soap:Envelope>
+```
 
 #### Set the weight, the height and the goal weight of an user
-```<soap:Envelope
+```
+<soap:Envelope
 xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
 soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
     <soap:Body xmlns:m="http://ws.adapter.introsde/">
@@ -42,10 +47,12 @@ soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
         	<weight_goal>75</weight_goal>
         </m:setInfo>
     </soap:Body>
-</soap:Envelope>```
+</soap:Envelope>
+```
 
 #### Update the weight of an user
-```<soap:Envelope
+```
+<soap:Envelope
 xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
 soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
     <soap:Body xmlns:m="http://ws.adapter.introsde/">
@@ -57,20 +64,24 @@ soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
         	<weight>79</weight>
         </m:weightUpdate>
     </soap:Body>
-</soap:Envelope>```
+</soap:Envelope>
+```
 
 #### Get the list of exercises
-```<soap:Envelope
+```
+<soap:Envelope
 xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
 soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
     <soap:Body xmlns:m="http://ws.adapter.introsde/">
         <m:getExercises>
         </m:getExercises>
     </soap:Body>
-</soap:Envelope>```
+</soap:Envelope>
+```
 
 #### Get detailed nutritional information for the specified food
-```<soap:Envelope
+```
+<soap:Envelope
 xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
 soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
     <soap:Body xmlns:m="http://ws.adapter.introsde/">
@@ -78,10 +89,12 @@ soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
         	<foodId>1234</foodId>
         </m:getFood>
     </soap:Body>
-</soap:Envelope>```
+</soap:Envelope>
+```
 
 #### Conducts a search of the food database using the search expression specified
-```<soap:Envelope
+```
+<soap:Envelope
 xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
 soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
     <soap:Body xmlns:m="http://ws.adapter.introsde/">
@@ -89,10 +102,12 @@ soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
         	<text>Tiramisu</text>
         </m:searchFood>
     </soap:Body>
-</soap:Envelope>```
+</soap:Envelope>
+```
 
 #### Returns the daily exercise entries for the user on a nominated date (0 = current day)
-```<soap:Envelope
+```
+<soap:Envelope
 xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
 soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
     <soap:Body xmlns:m="http://ws.adapter.introsde/">
@@ -104,10 +119,12 @@ soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
         	<date>0</date>
         </m:getExerciseEntry>
     </soap:Body>
-</soap:Envelope>```
+</soap:Envelope>
+```
 
 #### Records a change to a user's exercise diary entry for a current day
-```<soap:Envelope
+```
+<soap:Envelope
 xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
 soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
     <soap:Body xmlns:m="http://ws.adapter.introsde/">
@@ -120,10 +137,12 @@ soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
         	<minutes>60</minutes>
         </m:editExerciseEntry>
     </soap:Body>
-</soap:Envelope>```
+</soap:Envelope>
+```
 
 #### Takes the set of exercise entries and saves these entries as "template" entries for nominated days of the week (The days of the week specified as bits with Sunday being the 1st bit and Saturday being the last and then converted to an Int)
-```<soap:Envelope
+```
+<soap:Envelope
 xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
 soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
     <soap:Body xmlns:m="http://ws.adapter.introsde/">
@@ -135,10 +154,12 @@ soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
         	<days>127</days>
         </m:saveTemplate>
     </soap:Body>
-</soap:Envelope>```
+</soap:Envelope>
+```
 
 #### Saves the default exercise entries for the user on current day
-```<soap:Envelope
+```
+<soap:Envelope
 xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
 soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
     <soap:Body xmlns:m="http://ws.adapter.introsde/">
@@ -149,4 +170,5 @@ soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
         	</user>
         </m:commitDay>
     </soap:Body>
-</soap:Envelope>```
+</soap:Envelope>
+```
