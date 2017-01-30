@@ -18,10 +18,10 @@ import introsde.adapter.model.*;
 public interface Interface {
     
     @WebMethod(operationName="createPerson")
-    public String[] createPerson(@WebParam(name="personId") int id);
+    public Person createPerson(@WebParam(name="personId") int id);
     
     @WebMethod(operationName="getAuth_info")
-    public String[] get_auth(@WebParam(name="personId") int id);
+    public Person get_auth(@WebParam(name="personId") int id);
     
     @WebMethod(operationName="getExercises")
     public List<Exercise> getExercises();
@@ -31,5 +31,13 @@ public interface Interface {
     
     @WebMethod(operationName="searchFood")
     public List<Food> searchFood(@WebParam(name="text") String s);
+    
+    //Exercise Diary
+    @WebMethod(operationName="getExerciseEntry")
+    public List<Exercise> getExerciseEntry(@WebParam(name="oauth_token") Person user, @WebParam(name="date") int date);
+    
+//    @WebMethod(operationName="editExerciseEntry")
+//    public void editExerciseEntry(@WebParam(name="oauth_token") Person user, @WebParam(name="date") int date);
+    
 
 }

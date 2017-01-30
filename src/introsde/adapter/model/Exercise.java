@@ -4,6 +4,8 @@ public class Exercise {
 	
 	private int id;
 	private String name;
+	private int minutes;
+	private double calories;
 	
 	public int getId() {
 		return id;
@@ -19,5 +21,21 @@ public class Exercise {
 	
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public int getMinutes() {
+		return minutes;
+	}
+
+	public void setMinutes(int minutes) {
+		this.minutes = minutes;
+	}
+
+	public double getCalories() {
+		return calories;
+	}
+
+	public void setCalories(double calories) {
+		this.calories = calories;
 	}
 }

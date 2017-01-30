@@ -8,6 +8,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 import java.util.Random;
 
@@ -26,7 +27,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import introsde.adapter.ws.Interface;
-import sun.misc.BASE64Encoder;
 
 import introsde.adapter.model.*;
 
@@ -45,21 +45,21 @@ public class Implementation implements Interface{
 	JsonNode node;
 	
 	@Override
-	public String[] createPerson(int id) {
+	public Person createPerson(int id) {
 		System.out.println("Create Person");
 		return sendPersonRequest("profile.create", id);
 	}
 	
 	
 	@Override
-	public String[] get_auth(int id) {
+	public Person get_auth(int id) {
 		System.out.println("Get auth");
 		return sendPersonRequest("profile.get_auth", id);
 	}
 	
 	
 	
-	public String[] sendPersonRequest(String method, int id){
+	public Person sendPersonRequest(String method, int id){
 		List<String> params = new ArrayList<>(Arrays.asList(generateOauthParams()));
    
         params.add("method="+ method);
@@ -70,11 +70,11 @@ public class Implementation implements Interface{
 		Response resp = service.request().get();
 	    String json = resp.readEntity(String.class);
 	    
-	    String[] result= new String[2];
+	    Person result= new Person();
 		try {
 			node = mapper.readTree(json);
-			result[0] = node.path("profile").path("auth_secret").asText();
-			result[1] = node.path("profile").path("auth_token").asText();	
+			result.setAuth_secret(node.path("profile").path("auth_secret").asText());
+			result.setAuth_token(node.path("profile").path("auth_token").asText());
 			
 		} catch (JsonProcessingException e) {
 			// TODO Auto-generated catch block
@@ -182,6 +182,46 @@ public class Implementation implements Interface{
 		}
 		return foods;
 	}
+	
+	
+	@Override
+	public List<Exercise> getExerciseEntry(Person user, int date) {
+		List<String> params = new ArrayList<>(Arrays.asList(generateOauthParams()));
+
+        params.add("method=exercise_entries.get");
+        params.add("date="+date);
+        params.add("oauth_token="+user.getAuth_token());
+        
+        params.add("oauth_signature=" + sign("GET", params.toArray(template), user.getAuth_secret()));
+
+        System.out.println(APP_URL +"?" + paramify(params.toArray(template)));
+	
+		service = client.target(APP_URL +"?" + paramify(params.toArray(template)));
+		Response resp = service.request().get();
+	    String json = resp.readEntity(String.class);
+	    System.out.println(json);
+	    
+	    List<Exercise> exercises = new ArrayList<>();
+	    try {
+			node = mapper.readTree(json);
+			JsonNode foodsNode = node.path("exercise_entries").path("exercise_entry");
+			for (JsonNode n : foodsNode) {
+				Exercise e = new Exercise();
+				e.setId(n.path("exercise_id").asInt());
+				e.setName(n.path("exercise_name").asText());
+				e.setMinutes(n.path("minutes").asInt());
+				e.setCalories(n.path("calories").asDouble());
+				exercises.add(e);
+			}
+			
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	    
+		return exercises;
+	}
 
 
 
@@ -204,15 +244,33 @@ public class Implementation implements Interface{
 		return n.toString();
 	}
 	
+	
+	
 	private static String sign(String method, String[] params){
-		
 		String s;
 		try {
 			s = method + "&" + URLEncoder.encode(APP_URL, "ISO-8859-1") + "&" + URLEncoder.encode(paramify(params), "ISO-8859-1");
 			SecretKey sk = new SecretKeySpec((APP_SECRET+"&").getBytes(), HMAC_SHA1_ALGORITHM);
 			Mac m = Mac.getInstance(HMAC_SHA1_ALGORITHM);
 			m.init(sk);
-	        return URLEncoder.encode(new String(new BASE64Encoder().encode(m.doFinal(s.getBytes())).trim()), "ISO-8859-1");
+	        return URLEncoder.encode(new String(Base64.getEncoder().encode(m.doFinal(s.getBytes()))).trim(), "ISO-8859-1");
+		} catch (UnsupportedEncodingException | NoSuchAlgorithmException | InvalidKeyException e) {
+			System.err.println("FatSecret_TEST FAIL error:" + e.getMessage());
+            return null;
+		}
+        
+    }
+	
+	
+	
+	private static String sign(String method, String[] params, String auth_secret){
+		String s;
+		try {
+			s = method + "&" + URLEncoder.encode(APP_URL, "ISO-8859-1") + "&" + URLEncoder.encode(paramify(params), "ISO-8859-1");
+			SecretKey sk = new SecretKeySpec((APP_SECRET+"&"+auth_secret).getBytes(), HMAC_SHA1_ALGORITHM);
+			Mac m = Mac.getInstance(HMAC_SHA1_ALGORITHM);
+			m.init(sk);
+	        return URLEncoder.encode(new String(Base64.getEncoder().encode(m.doFinal(s.getBytes()))).trim(), "ISO-8859-1");
 		} catch (UnsupportedEncodingException | NoSuchAlgorithmException | InvalidKeyException e) {
 			System.err.println("FatSecret_TEST FAIL error:" + e.getMessage());
             return null;
