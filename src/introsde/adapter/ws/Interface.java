@@ -42,8 +42,14 @@ public interface Interface {
     @WebMethod(operationName="getExerciseEntry")
     public List<Exercise> getExerciseEntry(@WebParam(name="user") Person user, @WebParam(name="date") int date);
     
-//    @WebMethod(operationName="editExerciseEntry")
-//    public void editExerciseEntry(@WebParam(name="oauth_token") Person user, @WebParam(name="date") int date);
+    @WebMethod(operationName="editExerciseEntry")
+    public boolean editExerciseEntry(@WebParam(name="oauth_token") Person user, @WebParam(name="id_exercise") int id, @WebParam(name="minutes") int minutes);
     
+    @WebMethod(operationName="saveTemplate")
+    public boolean saveTemplate(@WebParam(name="oauth_token") Person user, @WebParam(name="days") int days);
+    
+    @WebMethod(operationName="commitDay")
+    public boolean commitDay(@WebParam(name="oauth_token") Person user);
 
+    
 }

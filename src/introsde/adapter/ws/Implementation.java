@@ -249,7 +249,8 @@ public class Implementation implements Interface{
 		List<String> params = new ArrayList<>(Arrays.asList(generateOauthParams()));
 
         params.add("method=exercise_entries.get");
-        params.add("date="+date);
+        if(date!=0)
+        	params.add("date="+date);
         params.add("oauth_token="+user.getAuth_token());
         
         params.add("oauth_signature=" + sign("GET", params.toArray(template), user.getAuth_secret()));
@@ -258,7 +259,7 @@ public class Implementation implements Interface{
 		service = client.target(APP_URL +"?" + paramify(params.toArray(template)));
 		Response resp = service.request().get();
 	    String json = resp.readEntity(String.class);
-//	    System.out.println(json);
+	    System.out.println(json);
 	    
 	    List<Exercise> exercises = new ArrayList<>();
 	    try {
@@ -282,7 +283,90 @@ public class Implementation implements Interface{
 		return exercises;
 	}
 
+	
+	@Override
+	public boolean editExerciseEntry(Person user, int id, int minutes) {
+		List<String> params = new ArrayList<>(Arrays.asList(generateOauthParams()));
 
+        params.add("method=exercise_entry.edit");
+        params.add("shift_from_id=2");
+        params.add("shift_to_id="+id);
+        params.add("minutes="+minutes);
+        params.add("oauth_token="+user.getAuth_token());
+        
+        params.add("oauth_signature=" + sign("GET", params.toArray(template), user.getAuth_secret()));
+
+	
+		service = client.target(APP_URL +"?" + paramify(params.toArray(template)));
+		Response resp = service.request().get();
+	    String json = resp.readEntity(String.class);
+	    System.out.println(json);
+	    
+	    try {
+			node = mapper.readTree(json);
+			if(node.path("success").path("value").asInt()==1)
+				return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	    return false;
+		
+	}
+	
+	@Override
+	public boolean saveTemplate(Person user, int days) {
+		List<String> params = new ArrayList<>(Arrays.asList(generateOauthParams()));
+
+        params.add("method=exercise_entries.save_template");
+        params.add("days="+days);
+        params.add("oauth_token="+user.getAuth_token());
+        
+        params.add("oauth_signature=" + sign("GET", params.toArray(template), user.getAuth_secret()));
+
+	
+		service = client.target(APP_URL +"?" + paramify(params.toArray(template)));
+		Response resp = service.request().get();
+	    String json = resp.readEntity(String.class);
+	    System.out.println(json);
+	    
+	    try {
+			node = mapper.readTree(json);
+			if(node.path("success").path("value").asInt()==1)
+				return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	    return false;
+	}
+	
+	@Override
+	public boolean commitDay(Person user) {
+		List<String> params = new ArrayList<>(Arrays.asList(generateOauthParams()));
+
+        params.add("method=exercise_entries.commit_day");
+        params.add("oauth_token="+user.getAuth_token());
+        
+        params.add("oauth_signature=" + sign("GET", params.toArray(template), user.getAuth_secret()));
+
+	
+		service = client.target(APP_URL +"?" + paramify(params.toArray(template)));
+		Response resp = service.request().get();
+	    String json = resp.readEntity(String.class);
+	    System.out.println(json);
+	    
+	    try {
+			node = mapper.readTree(json);
+			if(node.path("success").path("value").asInt()==1)
+				return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	    return false;
+	}
+	
+	
+	
+	
 
 
 	private static String[] generateOauthParams(){
@@ -347,6 +431,9 @@ public class Implementation implements Interface{
         }
         return result;
     }
+
+
+
 
 
 
