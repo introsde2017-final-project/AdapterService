@@ -27,7 +27,7 @@ public interface Interface {
     public boolean setInfo(@WebParam(name="user") Person user, @WebParam(name="weight") double weight, @WebParam(name="height") double height, @WebParam(name="weight_goal") double weight_goal);
     
     @WebMethod(operationName="weightUpdate")
-    public boolean weightUpdate(@WebParam(name="user") Person user, @WebParam(name="weight") int weight);
+    public boolean weightUpdate(@WebParam(name="user") Person user, @WebParam(name="weight") double weight);
     
     @WebMethod(operationName="getExercises")
     public List<Exercise> getExercises();

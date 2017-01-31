@@ -117,7 +117,7 @@ public class Implementation implements Interface{
 
 
 	@Override
-	public boolean weightUpdate(Person user, int weight) {
+	public boolean weightUpdate(Person user, double weight) {
 		List<String> params = new ArrayList<>(Arrays.asList(generateOauthParams()));
 
         params.add("method=weight.update");
