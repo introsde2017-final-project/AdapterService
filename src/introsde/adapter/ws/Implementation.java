@@ -47,8 +47,8 @@ public class Implementation implements Interface{
 	// <---------  PERSON 
 	
 	@Override
-	public Person createPerson(int id) {
-		return sendPersonRequest("profile.create", id);
+	public Person createPerson() {
+		return sendPersonRequest("profile.create", 0);
 	}
 	
 	
@@ -63,7 +63,8 @@ public class Implementation implements Interface{
 		List<String> params = new ArrayList<>(Arrays.asList(generateOauthParams()));
    
         params.add("method="+ method);
-        params.add("user_id="+id);
+        if(id!=0)
+        	params.add("user_id="+id);
         params.add("oauth_signature=" + sign("GET", params.toArray(template)));
 		
 		service = client.target(APP_URL +"?" + paramify(params.toArray(template)));
@@ -300,7 +301,6 @@ public class Implementation implements Interface{
 		service = client.target(APP_URL +"?" + paramify(params.toArray(template)));
 		Response resp = service.request().get();
 	    String json = resp.readEntity(String.class);
-	    System.out.println(json);
 	    
 	    try {
 			node = mapper.readTree(json);

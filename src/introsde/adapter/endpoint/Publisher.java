@@ -17,7 +17,7 @@ public class Publisher {
         {
             HOSTNAME = "localhost";
         }
-        String PORT = "6902";
+        String PORT = "6903";
         String BASE_URL = "/adapter";
 
         if (String.valueOf(System.getenv("PORT")) != "null"){

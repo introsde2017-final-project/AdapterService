@@ -18,7 +18,7 @@ import introsde.adapter.model.*;
 public interface Interface {
     
     @WebMethod(operationName="createPerson")
-    public Person createPerson(@WebParam(name="personId") int id);
+    public Person createPerson();
     
     @WebMethod(operationName="getAuth_info")
     public Person get_auth(@WebParam(name="personId") int id);	
@@ -43,13 +43,13 @@ public interface Interface {
     public List<Exercise> getExerciseEntry(@WebParam(name="user") Person user, @WebParam(name="date") int date);
     
     @WebMethod(operationName="editExerciseEntry")
-    public boolean editExerciseEntry(@WebParam(name="oauth_token") Person user, @WebParam(name="id_exercise") int id, @WebParam(name="minutes") int minutes);
+    public boolean editExerciseEntry(@WebParam(name="user") Person user, @WebParam(name="id_exercise") int id, @WebParam(name="minutes") int minutes);
     
     @WebMethod(operationName="saveTemplate")
-    public boolean saveTemplate(@WebParam(name="oauth_token") Person user, @WebParam(name="days") int days);
+    public boolean saveTemplate(@WebParam(name="user") Person user, @WebParam(name="days") int days);
     
     @WebMethod(operationName="commitDay")
-    public boolean commitDay(@WebParam(name="oauth_token") Person user);
+    public boolean commitDay(@WebParam(name="user") Person user);
 
     
 }
