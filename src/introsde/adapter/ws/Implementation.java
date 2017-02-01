@@ -8,7 +8,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Base64;
+import javax.xml.bind.DatatypeConverter;
 import java.util.List;
 import java.util.Random;
 
@@ -397,7 +397,7 @@ public class Implementation implements Interface{
 			SecretKey sk = new SecretKeySpec((APP_SECRET+"&").getBytes(), HMAC_SHA1_ALGORITHM);
 			Mac m = Mac.getInstance(HMAC_SHA1_ALGORITHM);
 			m.init(sk);
-	        return URLEncoder.encode(new String(Base64.getEncoder().encode(m.doFinal(s.getBytes()))).trim(), "ISO-8859-1");
+	        return URLEncoder.encode(new String(DatatypeConverter.printBase64Binary(m.doFinal(s.getBytes()))).trim(), "ISO-8859-1");
 		} catch (UnsupportedEncodingException | NoSuchAlgorithmException | InvalidKeyException e) {
 			System.err.println("FatSecret_TEST FAIL error:" + e.getMessage());
             return null;
@@ -414,7 +414,7 @@ public class Implementation implements Interface{
 			SecretKey sk = new SecretKeySpec((APP_SECRET+"&"+auth_secret).getBytes(), HMAC_SHA1_ALGORITHM);
 			Mac m = Mac.getInstance(HMAC_SHA1_ALGORITHM);
 			m.init(sk);
-	        return URLEncoder.encode(new String(Base64.getEncoder().encode(m.doFinal(s.getBytes()))).trim(), "ISO-8859-1");
+	        return URLEncoder.encode(new String(DatatypeConverter.printBase64Binary(m.doFinal(s.getBytes()))).trim(), "ISO-8859-1");
 		} catch (UnsupportedEncodingException | NoSuchAlgorithmException | InvalidKeyException e) {
 			System.err.println("FatSecret_TEST FAIL error:" + e.getMessage());
             return null;
