@@ -39,34 +39,9 @@
 <!--        <dependency org="org.glassfish.jersey.containers" name="jersey-container-grizzly2-http" rev="2.11"/>
     -->    
         <dependency org="org.glassfish.jersey.containers" name="jersey-container-jdk-http" rev="2.11"/>
-            
-        <dependency org="com.fasterxml.jackson.core" name="jackson-core" rev="2.4.2">
-            <artifact name="jackson-core" type="jar"/>
-        </dependency>
-        <dependency org="com.fasterxml.jackson.module" name="jackson-module-jaxb-annotations" rev="2.4.1">
-            <artifact name="jackson-module-jaxb-annotations" type="jar"/>
-        </dependency>
-        <dependency org="com.fasterxml.jackson.core" name="jackson-databind" rev="2.4.2">
-            <artifact name="jackson-databind" type="jar"/>
-        </dependency>
-        <dependency org="com.fasterxml.jackson.core" name="jackson-annotations" rev="2.4.2">
-            <artifact name="jackson-annotations" type="jar"/>
-        </dependency>
-        <dependency org="com.fasterxml.jackson.jaxrs" name="jackson-jaxrs-json-provider" rev="2.4.2">
-            <artifact name="jackson-jaxrs-json-provider" type="jar"/>
-        </dependency>
-        <dependency org="com.fasterxml.jackson.jaxrs" name="jackson-jaxrs-base" rev="2.4.2">
-            <artifact name="jackson-jaxrs-base" type="jar"/>
-        </dependency>
+
         
-        <dependency org="org.xerial" name="sqlite-jdbc" rev="3.7.2"/>
-        <dependency org="org.mongodb" name="mongo-java-driver" rev="2.12.3"/>
-        <dependency org="com.h2database" name="h2" rev="1.4.181"/>
-        <dependency org="org.apache.derby" name="derby" rev="10.10.2.0"/>
         <dependency org="javax.ejb" name="javax.ejb-api" rev="3.2"/>
-        <dependency org="org.eclipse.persistence" name="javax.persistence" rev="2.1.0"/>
-        <dependency org="org.eclipse.persistence" name="org.eclipse.persistence.jpa" rev="2.5.2"/>
-        <dependency org="org.eclipse.persistence" name="org.eclipse.persistence.nosql" rev="2.5.2"/>
         
         
         
