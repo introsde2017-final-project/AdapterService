@@ -38,6 +38,13 @@ public interface Interface {
     @WebMethod(operationName="searchFood")
     public List<Food> searchFood(@WebParam(name="text") String s);
     
+    //Recipes
+    @WebMethod(operationName="getRecipe")
+    public Recipe getRecipe(@WebParam(name="recipeId") int recipe_id);
+    
+    @WebMethod(operationName="searchRecipes")
+    public List<Recipe> searchRecipes(@WebParam(name="text") String s);
+    
     //Exercise Diary
     @WebMethod(operationName="getExerciseEntry")
     public List<Exercise> getExerciseEntry(@WebParam(name="user") Person user, @WebParam(name="date") int date);

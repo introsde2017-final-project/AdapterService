@@ -1,5 +1,6 @@
 package introsde.adapter.ws;
 
+import javax.jws.WebParam;
 import javax.jws.WebService;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -181,7 +182,7 @@ public class Implementation implements Interface{
 		List<String> params = new ArrayList<>(Arrays.asList(generateOauthParams()));
 
         params.add("method=foods.search");
-        params.add("search_expression="+s);
+		params.add("search_expression="+ s.replaceAll(" ", "%20"));
         params.add("oauth_signature=" + sign("GET", params.toArray(template)));
         
 	
@@ -209,6 +210,75 @@ public class Implementation implements Interface{
 			e.printStackTrace();
 		}
 		return foods;
+	}
+	
+	
+	// <------ RECIPES
+
+	
+	@Override
+	public Recipe getRecipe(int recipe_id) {
+		List<String> params = new ArrayList<>(Arrays.asList(generateOauthParams()));
+		
+        params.add("method=recipe.get");
+        params.add("recipe_id=" + recipe_id);
+        params.add("oauth_signature=" + sign("GET", params.toArray(template)));
+        
+		
+		service = client.target(APP_URL +"?" + paramify(params.toArray(template)));
+		Response resp = service.request().get();
+	    String json = resp.readEntity(String.class);
+	    System.out.println(json);
+	    Recipe r = new Recipe();
+	    try {
+			node = mapper.readTree(json);
+			r.setId(node.path("recipe").path("recipe_id").asInt());
+			r.setName(node.path("recipe").path("recipe_name").asText());
+			r.setDescription(node.path("recipe").path("recipe_description").asText());
+			r.setUrl(node.path("recipe").path("recipe_url").asText());
+			r.setCalories(node.path("recipe").path("serving_sizes").path("serving").path("calories").asInt());
+			r.setCarbohydrate(node.path("recipe").path("serving_sizes").path("serving").path("carbohydrate").asDouble());
+			r.setFat(node.path("recipe").path("serving_sizes").path("serving").path("fat").asDouble());
+			r.setProtein(node.path("recipe").path("serving_sizes").path("serving").path("protein").asDouble());
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return r;
+	    
+	}
+	
+	@Override
+	public List<Recipe> searchRecipes(@WebParam(name="text") String s) {
+		List<String> params = new ArrayList<>(Arrays.asList(generateOauthParams()));
+
+		params.add("method=recipes.search");
+		params.add("max_results=10");
+		params.add("search_expression="+ s.replaceAll(" ", "%20"));
+        params.add("oauth_signature=" + sign("GET", params.toArray(template)));
+	
+		service = client.target(APP_URL +"?" + paramify(params.toArray(template)));
+		Response resp = service.request().get();
+	    String json = resp.readEntity(String.class);
+
+	    List<Recipe> recipes = new ArrayList<>();
+	    try {
+			node = mapper.readTree(json);
+			JsonNode recipesNode = node.path("recipes").path("recipe");
+			for (JsonNode n : recipesNode) {
+				Recipe r = new Recipe();
+				r.setId(n.path("recipe_id").asInt());
+				r.setName(n.path("recipe_name").asText());
+				recipes.add(r);
+			}
+			
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return recipes;
 	}
 	
 	// <--------- EXERCISE
