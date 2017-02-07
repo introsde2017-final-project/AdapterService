@@ -10,6 +10,7 @@ public class Recipe {
 	private double carbohydrate;
 	private double protein;
 	private double fat;
+	private String image;
 	
 	
 	public int getId() {
@@ -74,6 +75,14 @@ public class Recipe {
 
 	public void setFat(double fat) {
 		this.fat = fat;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 	
 

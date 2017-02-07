@@ -228,7 +228,7 @@ public class Implementation implements Interface{
 		service = client.target(APP_URL +"?" + paramify(params.toArray(template)));
 		Response resp = service.request().get();
 	    String json = resp.readEntity(String.class);
-	    System.out.println(json);
+
 	    Recipe r = new Recipe();
 	    try {
 			node = mapper.readTree(json);
@@ -240,6 +240,7 @@ public class Implementation implements Interface{
 			r.setCarbohydrate(node.path("recipe").path("serving_sizes").path("serving").path("carbohydrate").asDouble());
 			r.setFat(node.path("recipe").path("serving_sizes").path("serving").path("fat").asDouble());
 			r.setProtein(node.path("recipe").path("serving_sizes").path("serving").path("protein").asDouble());
+			r.setImage(node.path("recipe").path("recipe_images").path("recipe_image").asText());
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
