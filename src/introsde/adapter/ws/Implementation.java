@@ -357,11 +357,15 @@ public class Implementation implements Interface{
 
 	
 	@Override
-	public boolean editExerciseEntry(Person user, int id, int minutes) {
+	public boolean editExerciseEntry(Person user, int id, int minutes, boolean change_sleep) {
 		List<String> params = new ArrayList<>(Arrays.asList(generateOauthParams()));
 
         params.add("method=exercise_entry.edit");
-        params.add("shift_from_id=2");
+        if (change_sleep){
+        	params.add("shift_from_id=1");
+        }else{
+        	params.add("shift_from_id=2");
+        }
         params.add("shift_to_id="+id);
         params.add("minutes="+minutes);
         params.add("oauth_token="+user.getAuth_token());

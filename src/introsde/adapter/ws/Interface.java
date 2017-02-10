@@ -50,7 +50,7 @@ public interface Interface {
     public List<Exercise> getExerciseEntry(@WebParam(name="user") Person user, @WebParam(name="date") int date);
     
     @WebMethod(operationName="editExerciseEntry")
-    public boolean editExerciseEntry(@WebParam(name="user") Person user, @WebParam(name="id_exercise") int id, @WebParam(name="minutes") int minutes);
+    public boolean editExerciseEntry(@WebParam(name="user") Person user, @WebParam(name="id_exercise") int id, @WebParam(name="minutes") int minutes, @WebParam(name="change_sleeping") boolean change_sleep);
     
     @WebMethod(operationName="saveTemplate")
     public boolean saveTemplate(@WebParam(name="user") Person user, @WebParam(name="days") int days);
