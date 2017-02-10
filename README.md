@@ -4,6 +4,10 @@
 
 Documentation about the Adapter Service: SOAP Web Service
 
+This service interacts with [FatSecret](http://platform.fatsecret.com/api/), an External API, via REST and it was deployed on heroku at this link: https://adapter-service.herokuapp.com/adapter?wsdl
+
+This API collects information about Recipes (How to cook it, the amount of calories, fats, proteins, ...) and about the Exercises to do for consuming calories. 
+
 ## API
 #### Creates a new profile and returns the oauth_token and oauth_secret for the new profile
 ```
@@ -105,6 +109,32 @@ soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
 </soap:Envelope>
 ```
 
+#### Get detailed information for the specified recipe
+```
+<soap:Envelope
+xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+    <soap:Body xmlns:m="http://ws.adapter.introsde/">
+        <m:getRecipe>
+            <recipeId>91</recipeId>
+        </m:getRecipe>
+    </soap:Body>
+</soap:Envelope>
+```
+
+#### Conducts a search of the recipe database using the search expression specified
+```
+<soap:Envelope
+xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+    <soap:Body xmlns:m="http://ws.adapter.introsde/">
+        <m:searchRecipes>
+            <text>Pasta tuna</text>
+        </m:searchRecipes>
+    </soap:Body>
+</soap:Envelope>
+```
+
 #### Returns the daily exercise entries for the user on a nominated date (0 = current day)
 ```
 <soap:Envelope
@@ -135,6 +165,7 @@ soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
         	</user>
         	<id_exercise>9</id_exercise>
         	<minutes>60</minutes>
+            <change_sleeping>false</change_sleeping> 
         </m:editExerciseEntry>
     </soap:Body>
 </soap:Envelope>
